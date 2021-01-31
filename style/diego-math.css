@@ -7,3 +7,12 @@
     left: 50%;
     transform:  translate(-50%, -50%);
 }
+
+body {
+    background-color: #242526 !important;
+}
+
+.info
+{
+    color: white;
+}
