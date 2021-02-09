@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<div id="canvasesdiv" style="position:relative; width:800px; height:500px">
+<canvas id="layer1"  style="z-index: 1; position:absolute; left:0px; top:0px;" width="800" height="500"></canvas>
+<canvas id="layer1f" style="z-index: 1; position:absolute; left:0px; top:0px;" width="800" height="500"></canvas>
+<canvas id="layer2"  style="z-index: 2; position:absolute; left:0px; top:0px;" width="800" height="500"></canvas>
+<canvas id="layer2f"  style="z-index: 2; position:absolute; left:0px; top:0px;" width="800" height="500"></canvas>
+<canvas id="layer3"  style="z-index: 3; position:absolute; left:0px; top:0px;" width="800" height="500"></canvas>
+</div>
+<script>
+
+//var canvas = document.getElementById("myCanvas");
+//var context = canvas.getContext("2d");
+var layer1;
+var layer2;
+var layer3;
+var particles;
+var eruption;
+var timer;
+var timerRestart;
+
+function init(){
+    layer1 = document.getElementById("layer1");
+    ctx1 = layer1.getContext("2d");
+    layer1f = document.getElementById("layer1f");
+    f1 = layer1f.getContext("2d");
+    layer2 = document.getElementById("layer2");
+    ctx2 = layer2.getContext("2d");
+    layer2f = document.getElementById("layer2f");
+    f2 = layer2f.getContext("2d");
+    canvas=layer3 = document.getElementById("layer3");
+    context=ctx3 = layer3.getContext("2d");
+
+}
+
+function animationHandler(){
+    fillBackgroundColor(canvas, context);
+    drawVolcano();
+    //drawClouds();
+    eruption = setTimeout(makeParticles, 10);
+}
+
+
+var cloud = new Image();
+cloud.src='http://www.dominicanvoice.com/test/volcano/cloud.png';
+
+var fireball = new Image();
+fireball.src='http://www.dominicanvoice.com/test/volcano/fireball.png';
+
+function drawVolcano(){
+
+    img = new Image();
+    img.src='http://www.dominicanvoice.com/test/volcano/layer2.png';
+    img.onload = function() { ctx1.drawImage(this,0,0);};
+
+    img2 = new Image();
+    img2.src="http://www.dominicanvoice.com/test/volcano/front.png";
+    img2.onload = function() { ctx2.drawImage(this,0,0);};
+}
+
+function fillBackgroundColor(canvas, context){
+    ctx1.fillStyle = "#3399ff" ;
+    ctx1.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function makeParticles() {
+//create an array of particles for our animation
+    particles = [];
+    for(var i = 0; i < 100; i++)
+    {
+        particles.push(new Particle());
+    }
+
+}
+
+function degreesToRadians(degrees) {
+ //converts from degrees to radians and returns
+    return (degrees * Math.PI)/180;
+}
+
+function Particle(){
+ //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+ //this.x = Math.random()*canvas.width;
+ //this.y = Math.random()*canvas.height;
+    this.x = canvas.width/2;
+    this.y = 160;
+    this.vx = Math.random()*16-8;
+    this.vy = Math.random()*25;
+    var colors = ["red", "#ff6600", "yellow", "#262626"];
+    this.color = colors[Math.floor(Math.random()*colors.length)];
+    this.radius = 50;
+}
+
+function moveParticles() {
+ //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+    f1.clearRect(0, 0, canvas.width, canvas.height);
+    f2.clearRect(0, 0, canvas.width, canvas.height);
+    for(var i = 0; i < particles.length; i++)
+    {
+        var p = particles[i];
+        f=(p.vy>0) ?f1:f2;
+        if (p.vy>0) f.drawImage(cloud,Math.floor((25-p.vy)/2)*128,0,128,128,p.x-64,p.y,128,128) 
+        else ctx3.drawImage(cloud,1536,0,128,128,p.x-Math.random()*5-64,-20+Math.random()*10,128,128);
+
+        if (p.y<500) { 
+
+        f.drawImage(fireball,Math.floor(-p.vy/2)*128,0,128,64,p.x-64,p.y,128,64); 
+
+   //     f.beginPath();
+    //    f.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+    //    f.fillStyle = p.color;
+    //    f.fill();
+        p.x += p.vx;
+        p.y -= p.vy;
+        p.vy-=1;
+        if(p.x < -50) p.x = canvas.width+50;
+        if(p.y < -50) p.y = canvas.height+50;
+        if(p.x > canvas.width+50) p.x = -50;
+        if(p.y > canvas.height+50) p.y = -50;
+        p.radius -= 1;
+        };
+    }
+
+}
+
+
+window.onload = function() { 
+    init();
+    animationHandler();
+    timer = setInterval(moveParticles, 60);
+    //timerRestart = setInterval(makeParticles, 4000);
+}
+</script>
+</body>
