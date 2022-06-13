@@ -7,8 +7,10 @@ a.substr(0,a.indexOf("viewform")) + "formResponse"
 'https://docs.google.com/forms/d/e/1FAIpQLSf7cwU84m0gVq0gW79yZyDb70JX7b0bQIdv6s906irn9xXE4A/formResponse'
 -->
 <form
+	id="myForm"
   method="POST"
   action="https://docs.google.com/forms/d/e/1FAIpQLSf7cwU84m0gVq0gW79yZyDb70JX7b0bQIdv6s906irn9xXE4A/formResponse"
+  target="my-response-iframe"
 >
   Name <input type="text" name="entry.572972093">
   <br/>
@@ -20,3 +22,34 @@ a.substr(0,a.indexOf("viewform")) + "formResponse"
   <br/>
    <button type="submit">Submit</button>
 </form>
+<p>
+	<button onclick="sendit()">Click me</button>
+</p>
+<iframe id="my-response-iframe" name="my-response-iframe"></iframe>
+<script>
+	function sendit()
+	{
+		alert("Sending...");
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", "https://docs.google.com/forms/d/e/1FAIpQLSf7cwU84m0gVq0gW79yZyDb70JX7b0bQIdv6s906irn9xXE4A/formResponse"); 
+		xhr.onload = function(event){ 
+		    alert("Success, server responded with: " + event.target.response); // raw response
+		}; 
+		// or onerror, onabort
+		var formData = new FormData(document.getElementById("myForm")); 
+		xhr.send(formData);
+	}
+
+
+  // set the target on the form to point to a hidden iframe
+   // some browsers need the target set via JavaScript, no idea why...
+   document.getElementById('myForm').target = 'my-response-iframe';
+   // detect when the iframe reloads
+   var iframe = document.getElementById('my-response-iframe');
+   if (iframe) {
+     iframe.onload = function () {
+       // now you can do stuff, such as displaying a message or redirecting to a new page.
+       alert("submitted!");
+     }
+   }	
+</script>
