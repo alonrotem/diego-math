@@ -1,0 +1,22 @@
+<!--
+https://docs.google.com/forms/d/e/1FAIpQLSf7cwU84m0gVq0gW79yZyDb70JX7b0bQIdv6s906irn9xXE4A/viewform
+
+
+var a=document.head.querySelector("[property~='og:url'][content]").content
+a.substr(0,a.indexOf("viewform")) + "formResponse"
+'https://docs.google.com/forms/d/e/1FAIpQLSf7cwU84m0gVq0gW79yZyDb70JX7b0bQIdv6s906irn9xXE4A/formResponse'
+-->
+<form
+  method="POST"
+  action="https://docs.google.com/forms/d/e/1FAIpQLSf7cwU84m0gVq0gW79yZyDb70JX7b0bQIdv6s906irn9xXE4A/formResponse"
+>
+  Name <input type="text" name="entry.572972093">
+  <br/>
+  Attendance <select name="entry.723442436">
+  	<option value="Coming">Yes</option>
+  	<option value="Maybe coming">Maybe</option>
+  	<option value="Not coming">Not</option>
+  </select>
+  <br/>
+   <button type="submit">Submit</button>
+</form>
